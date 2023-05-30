@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html class="light">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Budget Charts</title>
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+
+    <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/general.css">
+
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval';"/>
+    <meta http-equiv="X-Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval';"/>
+
+    <script type="module" src="./renderer/bundle.js"></script>
+  </head>
+  <body>
+    <button type="button" id="btn">Load file</button>
+    <strong id="filePath"></strong>
+
+    <div class="chart-container">
+      <canvas id="timeline-chart"></canvas>
+    </div>
+
+    <div class="table-container">
+      <table id="details-table">
+        <thead>
+          <tr>
+            <th>Datum</th>
+            <th>Auftraggeber</th>
+            <th>Verwendungszweck</th>
+            <th>Betrag (€)</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

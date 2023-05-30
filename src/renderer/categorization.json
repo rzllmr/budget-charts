@@ -1,0 +1,10 @@
+{
+  "Einkauf": ["REWE", "Famila", "Edeka", "Penny", "Biomarkt", "DM[- ]Drogerie", "BUDNIKOWSKY", "Rossmann", "Reformhaus", "Streubar", "Universal-Stein", "Apotheke"],
+  "Freizeit": ["Le Crobag", "Allwoerde", "NUR HIER", "Konditorei Junge", "Baeckerei", "Stadtbackerei", "Kumpir", "Louisiana", "Frittenwerk", "Peter Pane", "Soulkebab", "Pommes", "dean . david", "Tokas", "Vegangster", "Too Good To Go", "Tekin Imbiss", "Teas", "Froindlichst", "friends boba", "Donuts", "Ditsch", "Schokoladerie", "World of Candy", "Neotaste", "Yellowbird", "Cafe", "Bonbon", "Pizza", "Starbucks", "Eiswerkstatt", "Tortcheneck", "Tee", "Rainbow Ice", "Markthalle", "Laederach", "Bistro", "Cinemas", "CinemaxX", "Klimahaus", "DB UKE"],
+  "Versorger": ["wilhelm.tel", "Wasserwerke", "Energiewerke"],
+  "Einzahlung": ["Zillmer", "Komorek"],
+  "Miete": ["Schenk"],
+  "Einrichtung": ["Depot", "BAUHAUS", "Hagebaumarkt", "H.M Home", "Ikea", "Plantura", "Galeria", "Schnoor One", "Die Pampi", "Gartnereibedarf", "Butlers"],
+  "Hund": ["Hunderettung Europa", "Barmenia", "Alte Leipziger", "Z(ET)?TL(E)?.?.T.J.H", "Barfital", "Pet Food", "Herrmann GmbH", "Hunde Design", "Gassi Service", "hundeparadies", "Onlinepets", "Bellfor", "dogshop"],
+  "Sonstiges": ["Heymann", "Globetrotter"]
+}

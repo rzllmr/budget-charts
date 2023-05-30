@@ -1,0 +1,37 @@
+
+:root {
+  --font-sans: Arial, Helvetica, sans-serif;
+
+  --color-lightest: white;
+  --color-light: #fafafa;
+  --color-neutral: #777777;
+  --color-dark: #4b4453;
+  --color-darkest: #333;
+
+  --shadow-ui: 0 0 10px 5px rgba(0, 0, 0, 0.2);
+  --shadow-panel: 2px 2px 8px 0px rgba(0, 0, 0, 0.2);
+
+  --color-text-faded: var(--color-neutral);
+}
+
+:root.dark {
+  --color-highlight: rgb(229, 151, 0);
+
+  --color-background: var(--color-dark);
+  --color-panel: var(--color-darkest);
+  --color-button: var(--color-darkest);
+  --color-button-border: darkgrey;
+  --color-text: var(--color-lightest);
+  --color-text-highlight: var(--color-highlight);
+}
+
+:root.light {
+  --color-highlight: #0000EE;
+
+  --color-background: var(--color-light);
+  --color-panel: var(--color-lightest);
+  --color-button: var(--color-light);
+  --color-button-border: lightgrey;
+  --color-text: var(--color-darkest);
+  --color-text-highlight: var(--color-highlight);
+}
