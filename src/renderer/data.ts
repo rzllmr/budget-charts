@@ -138,10 +138,17 @@ export class Data {
     });
   }
 
-  public all() {
-    return this.records.map((record) => {
-      return [this.isoDate(record.date, true), record.client, record.purpose, this.money(record.amount)];
-    });
+  public filter(month?: string, category?: string) {
+    const recordData = new Array<Array<string>>();
+    for (const record of this.records) {
+      if (month && month != this.isoDate(record.date)) continue;
+      if (category && category != record.category) continue;
+
+      recordData.push(
+        [this.isoDate(record.date, true), record.client, record.purpose, this.money(record.amount)]
+      );
+    }
+    return recordData;
   }
 
   private average(array: number[]): number {
@@ -164,6 +171,6 @@ export class Data {
   }
 
   private money(value: number) {
-    return value.toString();
+    return value.toLocaleString(undefined, {minimumFractionDigits: 2});
   }
 }

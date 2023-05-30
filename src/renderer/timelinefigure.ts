@@ -40,7 +40,7 @@ export class TimelineFigure {
       const month = this.chart.data.labels[selection[0].index];
       const category = this.chart.data.datasets[selection[0].datasetIndex].label;
       console.log(month, category);
-      this.table.filter(month, category);
+      this.table.listRecords(month, category);
     }
 
     return new Chart(this.context, config);

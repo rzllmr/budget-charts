@@ -33,6 +33,10 @@ body {
   text-align: left;
 }
 
+table td:last-child, table th:last-child {
+  text-align: right;
+}
+
 h1 {
   font-size: 18px;
   display: inline-block;

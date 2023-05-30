@@ -11,15 +11,16 @@ export class DetailsTable {
 
   public setData(data: Data) {
     this.data = data;
-    this.filter('', '');
+    this.listRecords();
   }
 
-  filter(month: string, category: string) {
-    if (this.data) this.setRows(this.data.all().reverse());
+  listRecords(month?: string, category?: string) {
+    if (this.data == undefined) return;
+    this.setRows(this.data.filter(month, category).reverse());
   }
 
   private setRows(rows: Array<Array<string>>) {
-    for (var i = 1; i < this.body.rows.length; i++){
+    for (var i = this.body.rows.length-1; i >= 0; i--){
       this.body.deleteRow(i);
     }
         
