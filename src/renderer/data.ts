@@ -145,7 +145,7 @@ export class Data {
       if (category && category != record.category) continue;
 
       recordData.push(
-        [this.isoDate(record.date, true), record.client, record.purpose, this.money(record.amount)]
+        [this.isoDate(record.date, true), record.category, this.money(record.amount), this.mergedInfo(record.client, record.purpose)]
       );
     }
     return recordData;
@@ -170,7 +170,15 @@ export class Data {
     else return `${yyyy}-${mm}`;
   }
 
+  private mergedInfo(client: string, purpose: string) {
+    let parts = [
+      client.replace(/PayPal \(?Europe\)? S\.a.r\.l\. et Cie,? S\.C\.A/, ''),
+      purpose.replace(/.+Debitk\.\d+ VISA Debit/, '')
+    ];
+    return parts.filter((part) => part != '').join(' | ');
+  }
+
   private money(value: number) {
-    return value.toLocaleString(undefined, {minimumFractionDigits: 2});
+    return (-value).toLocaleString(undefined, {minimumFractionDigits: 2}) + ' €';
   }
 }
