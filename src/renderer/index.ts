@@ -1,6 +1,6 @@
 import IElectronAPI from "./preload.js";
 import { Data, Entry } from "./data";
-import { TimelineFigure } from "./timelinefigure";
+import { TimelineFigure, ButtonInfo } from "./timelinefigure";
 import { DetailsTable } from "./detailstable";
 
 declare global {
@@ -10,12 +10,14 @@ declare global {
 }
 
 class RendererIndex {
-  private button: HTMLButtonElement;
+  private toggleButtons: Array<HTMLButtonElement>;
+  private loadButton: HTMLButtonElement;
   private pathText: HTMLElement;
 
   private data?: Data;
   private timelineFigure: TimelineFigure;
   private detailsTable: DetailsTable;
+  private timeMode: string;
 
   private defaultPath = "/Users/robertzillmer/Projects/active/budget-charts/1083895290.csv";
 
@@ -23,18 +25,33 @@ class RendererIndex {
     this.detailsTable = new DetailsTable();
     this.timelineFigure = new TimelineFigure(this.detailsTable);
 
-    this.button = document.getElementById('btn') as HTMLButtonElement;
+    this.toggleButtons = new Array<HTMLButtonElement>();
+    this.loadButton = document.getElementById('load-button') as HTMLButtonElement;
     this.pathText = document.getElementById('filePath') as HTMLElement;
+    this.timeMode = 'months';
 
-    this.registerEvents();
+    this.loadButton.addEventListener('click', () => this.askAndLoadFile());
   }
 
   public pageLoaded() {
     this.loadFile(this.defaultPath);
   }
 
-  private registerEvents() {
-    this.button.addEventListener('click', () => this.askAndLoadFile());
+  private toggleTimeline() {
+    this.timeMode = this.timeMode == 'months' ? 'weeks' : 'months';
+    switch (this.timeMode) {
+      case 'months':
+        this.timelineFigure.setData(this.timeMode, this.data!.dateSums('months', 12));
+        break;
+      case 'weeks':
+        this.timelineFigure.setData(this.timeMode, this.data!.dateSums('weeks', 12));
+        break;
+    }
+  }
+
+  private toggle(button: HTMLButtonElement) {
+    this.timelineFigure.toggleData(button.textContent || '');
+    button.classList.toggle('hidden');
   }
 
   private askAndLoadFile() {
@@ -49,7 +66,25 @@ class RendererIndex {
   private fillData(records: Array<Entry>) {
     this.data = new Data(records);
     this.detailsTable.setData(this.data!);
-    this.timelineFigure.setData(this.data!.monthSums(Infinity));
+    this.timelineFigure.setData(this.timeMode, this.data!.dateSums('months', 12));
+    this.generateButtons(this.timelineFigure.categoryColors());
+  }
+
+  private generateButtons(infos: Array<ButtonInfo>) {
+    const toggles = document.getElementById('toggles') as HTMLDivElement;
+
+    const timeToggle = document.getElementById('time-toggle') as HTMLButtonElement;
+    timeToggle.addEventListener('click', () => this.toggleTimeline());
+    this.toggleButtons.push(timeToggle);
+
+    infos.forEach(info => {
+      const toggleButton = document.createElement('button');
+      toggleButton.textContent = info.category;
+      toggleButton.style.borderColor = info.borderColor;
+      toggleButton.style.backgroundColor = info.backgroundColor;
+      toggleButton.addEventListener('click', () => this.toggle(toggleButton));
+      toggles.appendChild(toggleButton);
+    });
   }
 }
 

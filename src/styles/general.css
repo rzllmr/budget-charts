@@ -125,6 +125,10 @@ button.project i {
   color: var(--color-text-faded);
 }
 
+button.hidden {
+  opacity: 0.5;
+}
+
 .buttons {
   position: absolute;
   top: 0;

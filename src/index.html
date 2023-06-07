@@ -16,8 +16,14 @@
     <script type="module" src="./renderer/bundle.js"></script>
   </head>
   <body>
-    <button type="button" id="btn">Load file</button>
-    <strong id="filePath"></strong>
+    <div id="loading">
+      <button type="button" id="load-button">Load file</button>
+      <strong id="filePath"></strong>
+    </div>
+
+    <div id="toggles">
+      <button type="button" id="time-toggle">Toggle time</button>
+    </div>
 
     <div class="chart-container">
       <canvas id="timeline-chart"></canvas>

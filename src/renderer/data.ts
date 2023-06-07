@@ -72,52 +72,65 @@ export type ChartEntry<T> = {
 
 export class Data {
   private records = new Array<Record>();
-  private sums = new Map<string,Map<string,number>>();
+  private ignoredCategories = ['Einzahlung', 'Hund'];
 
   constructor(rows: Array<Entry>) {
-    console.log("constructing...");
     for (const row of rows.reverse()) {
-      this.records.push(new Record(
+      const newRecord = new Record(
         row['Buchungstag'],
         row['Auftraggeber / Begünstigter'],
         row['Verwendungszweck'],
         row['Betrag (EUR)']
-      ));
+      );
+      if (!this.ignoredCategories.includes(newRecord.category)) {
+        this.records.push(newRecord);
+      }
     }
-    this.sumMonths();
-    console.log("done.");
   }
 
-  private sumMonths() {
+  private sumDates(convertDate: (date: Date) => string) {
+    const sums = new Map<string,Map<string,number>>()
     const knownCategories = Record.known_categories().add('unbekannt');
 
     this.records.forEach((record: Record) => {
-      const date = this.isoDate(record.date);
+      const date = convertDate(record.date);
       const category = record.category;
       const amount = record.amount;
 
-      let monthMap: Map<string,number>;
-      if (!this.sums.has(date)) {
-        monthMap = this.sums.set(date, new Map<string,number>()).get(date)!;
-        knownCategories.forEach((category) => monthMap.set(category, 0));
+      let categorySums: Map<string,number>;
+      if (!sums.has(date)) {
+        categorySums = sums.set(date, new Map<string,number>()).get(date)!;
+        knownCategories.forEach((category) => categorySums.set(category, 0));
       } else {
-        monthMap = this.sums.get(date)!;
+        categorySums = sums.get(date)!;
       }
 
-      monthMap.set(category, monthMap.get(category)! - amount);
+      categorySums.set(category, categorySums.get(category)! - amount);
     });
+
+    sums.forEach((categorySums) => {
+      let overallSum = 0;
+      categorySums.forEach((amount, category) => {
+        overallSum += amount;
+      });
+      categorySums.set('Gesamt', overallSum);
+    })
+
+    return sums;
   }
 
-  public monthSums(lastMonths: number) {
-    const ignoreCategories = ['Einzahlung', 'Hund'];
+  public dateSums(unit: string, upTo: number) {
+    const sums = this.sumDates(
+      unit == 'months' ? this.yearMonth : this.yearWeek
+    );
 
     const monthSums = new Map<string, Array<ChartEntry<string>>>();
-    const start = lastMonths == Infinity ? 0 : -lastMonths;
-    const months = Array.from(this.sums.keys()).slice(start, -1);
+    const allMonths = Array.from(sums.keys());
+    const start = upTo >= allMonths.length ? 0 : -upTo;
+    const months = allMonths.slice(start, -1);
     for (const month of months) {
-      const categories = this.sums.get(month);
+      const categories = sums.get(month);
       categories?.forEach((sum: number, category: string) => {
-        if (ignoreCategories.includes(category)) return;
         if (!monthSums.has(category)) monthSums.set(category, new Array<ChartEntry<string>>());
         monthSums.get(category)!.push({
           x: month, y: sum
@@ -141,11 +154,11 @@ export class Data {
   public filter(month?: string, category?: string) {
     const recordData = new Array<Array<string>>();
     for (const record of this.records) {
-      if (month && month != this.isoDate(record.date)) continue;
-      if (category && category != record.category) continue;
+      if (month && month != this.yearMonth(record.date)) continue;
+      if (category && category != 'Gesamt' && category != record.category) continue;
 
       recordData.push(
-        [this.isoDate(record.date, true), record.category, this.money(record.amount), this.mergedInfo(record.client, record.purpose)]
+        [this.yearMonth(record.date, true), record.category, this.money(record.amount), this.mergedInfo(record.client, record.purpose)]
       );
     }
     return recordData;
@@ -162,17 +175,25 @@ export class Data {
     return this.records.filter(record => record.date > latest);
   }
 
-  private isoDate(date: Date, day = false) {
+  private yearMonth(date: Date, day = false) {
     var dd = String(date.getDate()).padStart(2, '0');
-    var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var mm = String(date.getMonth() + 1).padStart(2, '0');
     var yyyy = date.getFullYear();
     if (day) return `${yyyy}-${mm}-${dd}`;
     else return `${yyyy}-${mm}`;
   }
 
+  private yearWeek(date: Date) {
+    const jan1 = new Date(date.getFullYear(), 0, 1);
+    const weekNumber = Math.ceil((((date.getTime() - jan1.getTime()) / 86400000) + jan1.getDay() + 1) / 7);
+    var ww = String(weekNumber).padStart(2, '0');
+    var yyyy = date.getFullYear();
+    return `${yyyy}-${ww}`;
+  }
+
   private mergedInfo(client: string, purpose: string) {
     let parts = [
-      client.replace(/PayPal \(?Europe\)? S\.a.r\.l\. et Cie,? S\.C\.A/, ''),
+      client.replace(/PayPal \(?Europe\)? S\.a.r\.l\. et Cie,? S\.C\.A\.?/, ''),
       purpose.replace(/.+Debitk\.\d+ VISA Debit/, '')
     ];
     return parts.filter((part) => part != '').join(' | ');

@@ -1,10 +1,15 @@
-const { Chart, registerables } = require("chart.js");
+const { Chart, registerables, Color } = require("chart.js");
 import { DetailsTable } from "./detailstable";
+
+export type ButtonInfo = {
+  category: string, borderColor: string, backgroundColor: string
+};
 
 export class TimelineFigure {
   private canvas: HTMLCanvasElement;
   private context: CanvasRenderingContext2D | null;
   private chart: any;
+  private mode: string;
 
   private table: DetailsTable;
 
@@ -14,11 +19,12 @@ export class TimelineFigure {
     this.canvas = document.getElementById("timeline-chart") as HTMLCanvasElement;
     this.context = this.canvas.getContext("2d");
     this.chart = this.createChart();
+    this.mode = 'months';
 
     this.table = table;
   }
 
-  createChart() {
+  public createChart() {
     const config = {
       type: 'line',
       options: {
@@ -46,7 +52,9 @@ export class TimelineFigure {
     return new Chart(this.context, config);
   }
 
-  setData(datasets: Array<{label: string, data:Array<{x: string, y: any}>}>) {
+  public setData(mode: string, datasets: Array<{label: string, data:Array<{x: string, y: any}>}>) {
+    this.mode = mode;
+
     const labels = new Array<string>();
     for (const point of datasets[0].data) {
       labels.push(point.x);
@@ -57,9 +65,26 @@ export class TimelineFigure {
     for (const dataset of datasets) {
       this.chart.data.datasets.push({
         label: dataset.label,
-        data: dataset.data.map((entry) => entry.y)
+        data: dataset.data.map((entry) => entry.y),
+        hidden: false
       });
     }
+    this.chart.update();
+  }
+
+  public categoryColors(): Array<ButtonInfo> {
+    return this.chart.data.datasets.map((dataset: any) => {
+      return {
+        category: dataset.label,
+        borderColor: dataset.borderColor,
+        backgroundColor: dataset.backgroundColor
+      };
+    });
+  }
+
+  public toggleData(label: string) {
+    const dataset = this.chart.data.datasets.find((dataset: any) => dataset.label == label);
+    dataset.hidden = !dataset.hidden;
     this.chart.update();
   }
 }
