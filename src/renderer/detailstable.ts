@@ -14,9 +14,9 @@ export class DetailsTable {
     this.listRecords();
   }
 
-  listRecords(month?: string, category?: string) {
+  listRecords(mode?: string, date?: string, category?: string) {
     if (this.data == undefined) return;
-    this.setRows(this.data.filter(month, category).reverse());
+    this.setRows(this.data.filter(mode, date, category).reverse());
   }
 
   private setRows(rows: Array<Array<string>>) {

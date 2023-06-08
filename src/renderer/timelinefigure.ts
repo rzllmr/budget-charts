@@ -43,10 +43,9 @@ export class TimelineFigure {
     this.canvas.onclick = (event) => {
       const selection = this.chart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, true);
       if (selection.length === 0) return;
-      const month = this.chart.data.labels[selection[0].index];
+      const date = this.chart.data.labels[selection[0].index];
       const category = this.chart.data.datasets[selection[0].datasetIndex].label;
-      console.log(month, category);
-      this.table.listRecords(month, category);
+      this.table.listRecords(this.mode, date, category);
     }
 
     return new Chart(this.context, config);

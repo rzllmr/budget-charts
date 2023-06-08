@@ -91,6 +91,7 @@ export class Data {
   private sumDates(convertDate: (date: Date) => string) {
     const sums = new Map<string,Map<string,number>>()
     const knownCategories = Record.known_categories().add('unbekannt');
+    this.ignoredCategories.forEach(category => knownCategories.delete(category));
 
     this.records.forEach((record: Record) => {
       const date = convertDate(record.date);
@@ -151,10 +152,11 @@ export class Data {
     });
   }
 
-  public filter(month?: string, category?: string) {
+  public filter(mode?: string, date?: string, category?: string) {
+    const convertDate = mode == "months" ? this.yearMonth : this.yearWeek;
     const recordData = new Array<Array<string>>();
     for (const record of this.records) {
-      if (month && month != this.yearMonth(record.date)) continue;
+      if (date && date != convertDate(record.date)) continue;
       if (category && category != 'Gesamt' && category != record.category) continue;
 
       recordData.push(
