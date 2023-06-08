@@ -1,4 +1,5 @@
-const { Chart, registerables, Color } = require("chart.js");
+const { Chart, registerables } = require("chart.js");
+const Color = require("color");
 import { DetailsTable } from "./detailstable";
 
 export type ButtonInfo = {
@@ -60,15 +61,36 @@ export class TimelineFigure {
     }
     this.chart.data.labels = labels;
 
+    const colors = this.generateColors(
+      datasets.map(dataset => dataset.label).sort()
+    );
+
     this.chart.data.datasets = [];
     for (const dataset of datasets) {
       this.chart.data.datasets.push({
         label: dataset.label,
         data: dataset.data.map((entry) => entry.y),
+        borderColor: colors.get(dataset.label)?.border,
+        backgroundColor: colors.get(dataset.label)?.background,
         hidden: false
       });
     }
     this.chart.update();
+  }
+
+  public generateColors(labels: Array<string>): Map<string, {border: string, background: string}> {
+    const palette = [
+      "#fd7f6f", "#7eb0d5", "#b2e061", "#bd7ebe", "#ffb55a", "#ffee65", "#beb9db", "#fdcce5", "#8bd3c7" // spring pastels
+    ];
+    const colors = new Map<string, {border: string, background: string}>();
+    for (let i = 0; i < labels.length; i++) {
+      const color = Color(palette[i % palette.length]);
+      colors.set(labels[i], {
+        border: color.hsl().string(),
+        background: color.hsl().fade(0.5).string()
+      });
+    }
+    return colors;
   }
 
   public categoryColors(): Array<ButtonInfo> {
