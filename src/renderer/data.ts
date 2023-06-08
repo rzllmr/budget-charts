@@ -155,6 +155,7 @@ export class Data {
   public filter(mode?: string, date?: string, category?: string) {
     const convertDate = mode == "months" ? this.yearMonth : this.yearWeek;
     const recordData = new Array<Array<string>>();
+    let sum = 0;
     for (const record of this.records) {
       if (date && date != convertDate(record.date)) continue;
       if (category && category != 'Gesamt' && category != record.category) continue;
@@ -162,7 +163,9 @@ export class Data {
       recordData.push(
         [this.yearMonth(record.date, true), record.category, this.money(record.amount), this.mergedInfo(record.client, record.purpose)]
       );
+      sum += record.amount;
     }
+    recordData.push([date || "", "Gesamt", this.money(sum), "Summe aller Beiträge"]);
     return recordData;
   }
 
@@ -190,7 +193,7 @@ export class Data {
     const weekNumber = Math.ceil((((date.getTime() - jan1.getTime()) / 86400000) + jan1.getDay() + 1) / 7);
     var ww = String(weekNumber).padStart(2, '0');
     var yyyy = date.getFullYear();
-    return `${yyyy}-${ww}`;
+    return `${yyyy}-KW${ww}`;
   }
 
   private mergedInfo(client: string, purpose: string) {

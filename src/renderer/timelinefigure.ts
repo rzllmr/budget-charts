@@ -37,6 +37,11 @@ export class TimelineFigure {
               }
             }
           }
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
         }
       }
     };
