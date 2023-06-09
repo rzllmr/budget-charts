@@ -18,7 +18,9 @@
   "author": "rzllmr <30299783+rzllmr@users.noreply.github.com>",
   "license": "MIT",
   "dependencies": {
+    "@types/color": "^3.0.3",
     "chart.js": "^4.2.1",
+    "color": "^4.2.3",
     "csv-parse": "^5.3.10",
     "font-awesome": "^4.7.0"
   },

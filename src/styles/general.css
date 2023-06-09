@@ -14,18 +14,42 @@ body {
   outline: none;
 }
 
-.chart-container {
+.container {
+  width: 100%;
+  border: 1px solid var(--color-button-border);
   position: relative;
-  width: 100vw;
-  height: 48vw;
+  padding: 10px;
+  box-sizing: border-box;
+  margin-bottom: 20px;
 }
 
-.table-container {
-  position: relative;
-  width: 98vw;
-  height: 38vw;
-  overflow-y: scroll;
+.label {
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  height: 20px;
+  padding: 0 5px;
+  color: var(--color-text-faded);
+  text-align: center;
+  background-color: var(--color-background);
+}
+
+#filepath {
+  margin-left: 10px;
+}
+
+#details-container {
   margin-top: 20px;
+}
+
+#table-container {
+  position: relative;
+  height: 34vh;
+  overflow-y: scroll;
+}
+
+#toggles {
+  margin-bottom: 10px;
 }
 
 #details-table {

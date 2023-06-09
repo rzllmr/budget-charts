@@ -16,38 +16,43 @@
     <script type="module" src="./renderer/bundle.js"></script>
   </head>
   <body>
-    <div id="loading">
-      <button type="button" id="load-button">Load file</button>
+    <div class="container" id="loading-container">
+      <div class="label">file to analyze</div>
+      <button type="button" id="load-button">Load...</button>
       <strong id="filePath"></strong>
     </div>
 
-    <div id="toggles">
-      <button type="button" id="time-toggle">Toggle time</button>
-    </div>
 
-    <div class="chart-container">
+    <div class="container" id="chart-container">
+      <div class="label">category timeline</div>
+      <div id="toggles">
+        <button type="button" id="time-toggle">Toggle time</button>
+      </div>
       <canvas id="timeline-chart"></canvas>
     </div>
 
-    <div class="table-container">
-      <table id="details-table">
-        <colgroup>
-           <col span="1" style="width: 10%;">
-           <col span="1" style="width: 10%;">
-           <col span="1" style="width: 10%;">
-           <col span="1" style="width: 70%;">
-        </colgroup>
-        <thead>
-          <tr>
-            <th>Datum</th>
-            <th>Kategorie</th>
-            <th>Betrag</th>
-            <th>Auftraggeber/Verwendungszweck</th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
+    <div class="container" id="details-container">
+      <div class="label">records table</div>
+      <div id="table-container">
+        <table id="details-table">
+          <colgroup>
+            <col span="1" style="width: 10%;">
+            <col span="1" style="width: 10%;">
+            <col span="1" style="width: 10%;">
+            <col span="1" style="width: 70%;">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Datum</th>
+              <th>Kategorie</th>
+              <th>Betrag</th>
+              <th>Auftraggeber/Verwendungszweck</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
     </div>
   </body>
 </html>
