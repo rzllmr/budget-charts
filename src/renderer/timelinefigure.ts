@@ -11,6 +11,7 @@ export class TimelineFigure {
   private context: CanvasRenderingContext2D | null;
   private chart: any;
   private mode: string;
+  private hidden: Set<string>;
 
   private table: DetailsTable;
 
@@ -21,6 +22,7 @@ export class TimelineFigure {
     this.context = this.canvas.getContext("2d");
     this.chart = this.createChart();
     this.mode = 'months';
+    this.hidden = new Set<string>();
 
     this.table = table;
   }
@@ -92,7 +94,7 @@ export class TimelineFigure {
         data: dataset.data.map((entry) => entry.y),
         borderColor: colors.get(dataset.label)?.border,
         backgroundColor: colors.get(dataset.label)?.background,
-        hidden: false
+        hidden: this.hidden.has(dataset.label)
       });
     }
     this.chart.update();
@@ -125,7 +127,13 @@ export class TimelineFigure {
 
   public toggleData(label: string) {
     const dataset = this.chart.data.datasets.find((dataset: any) => dataset.label == label);
-    dataset.hidden = !dataset.hidden;
+    if (dataset.hidden) {
+      dataset.hidden = false;
+      this.hidden.delete(dataset.label);
+    } else {
+      dataset.hidden = true;
+      this.hidden.add(dataset.label);
+    }
     this.chart.update();
   }
 }
