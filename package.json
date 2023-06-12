@@ -20,6 +20,7 @@
   "dependencies": {
     "@types/color": "^3.0.3",
     "chart.js": "^4.2.1",
+    "chartjs-plugin-annotation": "^3.0.1",
     "color": "^4.2.3",
     "csv-parse": "^5.3.10",
     "font-awesome": "^4.7.0"

@@ -163,8 +163,10 @@ export class Data {
     const recordData = new Array<Array<string>>();
     let sum = 0;
     for (const record of this.records) {
-      if (date && date != convertDate(record.date)) continue;
-      if (category && category != 'Gesamt' && category != record.category) continue;
+      if (mode != 'all') {
+        if (date && date != convertDate(record.date)) continue;
+        if (category && category != 'Gesamt' && category != record.category) continue;
+      }
 
       recordData.push(
         [this.yearMonth(record.date, true), record.category, this.money(record.amount), this.mergedInfo(record.client, record.purpose)]
