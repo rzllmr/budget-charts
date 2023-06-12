@@ -31,7 +31,7 @@ class Main {
   private createWindow() {
     this.mainWindow = new BrowserWindow({
       height: 1080,
-      width: 1920,
+      width: 960,
       title: `Budget Charts`,
       webPreferences: {
         contextIsolation: true,
@@ -39,9 +39,9 @@ class Main {
         preload: path.join(__dirname, "preload.js")
       }
     });
-    this.mainWindow.setAspectRatio(16/9);
+    this.mainWindow.setAspectRatio(8/9);
 
-    this.mainWindow.webContents.openDevTools();
+    //this.mainWindow.webContents.openDevTools();
     this.mainWindow.loadFile(path.join(__dirname, "../index.html"));
   }
 
