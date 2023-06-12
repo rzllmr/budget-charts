@@ -51,7 +51,7 @@ class Record {
       return "unbekannt";
     } else if (categories.length > 1) {
       console.warn(`${categories.join('|')}: ${client} | ${purpose}`)
-      return "ambiguous";
+      return "uneindeutig";
     }
 
     return categories[0];
@@ -93,6 +93,7 @@ export class Data {
     const knownCategories = Record.known_categories().add('unbekannt');
     this.ignoredCategories.forEach(category => knownCategories.delete(category));
 
+    let unknownSum = 0;
     this.records.forEach((record: Record) => {
       const date = convertDate(record.date);
       const category = record.category;
@@ -107,6 +108,7 @@ export class Data {
       }
 
       categorySums.set(category, categorySums.get(category)! - amount);
+      if (category == 'unbekannt') unknownSum -= amount;
     });
 
     sums.forEach((categorySums) => {
@@ -116,6 +118,10 @@ export class Data {
       });
       categorySums.set('Gesamt', overallSum);
     })
+
+    if (unknownSum == 0) {
+      sums.forEach(categorySums => categorySums.delete('unbekannt'));
+    }
 
     return sums;
   }
