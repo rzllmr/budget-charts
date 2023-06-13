@@ -19,7 +19,7 @@ class RendererIndex {
   private detailsTable: DetailsTable;
   private timeMode: string;
 
-  private defaultPath = "/Users/robertzillmer/Projects/active/budget-charts/1083895290.csv";
+  private defaultPath = "";
 
   constructor() {
     this.detailsTable = new DetailsTable();
@@ -27,14 +27,16 @@ class RendererIndex {
 
     this.toggleButtons = new Array<HTMLButtonElement>();
     this.loadButton = document.getElementById('load-button') as HTMLButtonElement;
-    this.pathText = document.getElementById('filePath') as HTMLElement;
+    this.pathText = document.getElementById('filepath') as HTMLElement;
     this.timeMode = 'months';
 
     this.loadButton.addEventListener('click', () => this.askAndLoadFile());
   }
 
   public pageLoaded() {
-    this.loadFile(this.defaultPath);
+    if (this.defaultPath.length > 0) {
+      this.loadFile(this.defaultPath);
+    }
   }
 
   private toggleTimeline() {
@@ -55,12 +57,20 @@ class RendererIndex {
   }
 
   private askAndLoadFile() {
-    window.electronAPI.askFile().then(arg => this.loadFile(arg));
+    window.electronAPI.askFile().then(path => {
+      if (path != null) this.loadFile(path);
+    });
   }
 
   private loadFile(filePath: string) {
-    this.pathText.textContent = filePath;
-    window.electronAPI.loadFile(filePath).then(arg => this.fillData(arg));
+    window.electronAPI.loadFile(filePath).then(records => {
+      if (typeof records == 'string') {
+        this.pathText.textContent = `Failed to load ${filePath}.`;
+      } else {
+        this.fillData(records);
+        this.pathText.textContent = filePath;
+      }
+    });
   }
 
   private fillData(records: Array<Entry>) {

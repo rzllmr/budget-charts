@@ -59,7 +59,8 @@ class Main {
       const records = new Array<Entry>;
       fs.createReadStream(path, {encoding: 'utf8'})
         .pipe(parse({delimiter: ';', from_line: 7, columns: true}))
-        .on('data', (row) => records.push(row))
+        .on('error', err => resolve(err.message))
+        .on('data', row => records.push(row))
         .on('end', () => resolve(records))
     });
   }

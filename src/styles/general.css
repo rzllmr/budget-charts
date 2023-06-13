@@ -25,9 +25,9 @@ body {
 
 .label {
   position: absolute;
-  top: -10px;
-  left: 20px;
-  height: 20px;
+  top: -12px;
+  left: 10px;
+  height: 12px;
   padding: 0 5px;
   color: var(--color-text-faded);
   text-align: center;

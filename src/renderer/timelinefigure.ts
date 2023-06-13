@@ -114,8 +114,9 @@ export class TimelineFigure {
                 xValue: () => this.annotation.posX(),
                 yValue: () => this.annotation.posY(),
                 backgroundColor: () => this.annotation.color(),
+                radius: () => this.annotation.radius(),
                 borderWidth: 0,
-                radius: () => this.annotation.radius()
+                drawTime: 'beforeDatasetsDraw'
               }
             }
           }
