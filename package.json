@@ -9,7 +9,8 @@
     "copy": "copyfiles -f src/index.html dist && copyfiles -f src/styles/*.css dist/styles",
     "build": "npm run clean && npm run compile && npm run copy",
     "start": "npm run build && electron .",
-    "build-renderer": "webpack --mode=development"
+    "build-renderer": "webpack --mode=development",
+    "pack": "electron-builder build"
   },
   "repository": {
     "type": "git",
@@ -42,6 +43,9 @@
     "asar": false,
     "directories": {
       "output": "bin"
+    },
+    "mac": {
+      "identity": null
     },
     "win": {
       "target": "portable",
