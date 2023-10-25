@@ -1,0 +1,50 @@
+[
+  {
+    "category": "Einkauf",
+    "patterns": ["REWE", "Famila", "Edeka", "Penny", "Biomarkt", "Reformhaus", "Streubar", "Orient Master", "Kaufland", "^#2022-10-08", "KoRo", "ERDKORN", "TJADENS", "Alnatura", "real GmbH"],
+    "budget": [{"since": "2022-08-01", "value": 0}, {"since": "2022-09-01", "value": 480}]
+  },
+  {
+    "category": "Einrichtung",
+    "patterns": ["Depot", "BAUHAUS", "Hagebaumarkt", "H.M Home", "Ikea", "Plantura", "Galeria", "Schnoor One", "Die Pampi", "Gartnereibedarf", "Butlers", "MissPompadour", "Motel a Miio", "Artavola", "So Clever", "FLORISTI", "Kara", "niceshops", "MEDIA MARKT", "toom", "Cyberport", "Ruggable", "Sybotanica", "Teppich"]
+  },
+  {
+    "category": "Einzahlung",
+    "patterns": ["Zillmer", "Komorek", "Abrechnung"]
+  },
+  {
+    "category": "Restaurant",
+    "patterns": ["Le Crobag", "Allwoerde", "NUR HIER", "Konditorei Junge", "Baeckerei", "Stadtbackerei", "Kumpir", "Louisiana", "Frittenwerk", "Peter Pane", "Soulkebab", "Pommes", "dean . david", "Tokas", "Vegangster", "Too Good To Go", "Tekin Imbiss", "Teas", "Froindlichst", "friends boba", "Donuts", "Ditsch", "Schokoladerie", "World of Candy", "Neotaste", "Yellowbird", "Cafe", "Bonbon", "Pizza", "Starbucks", "Eiswerkstatt", "Tortcheneck", "Tee", "Rainbow Ice", "Markthalle", "Laederach", "Bistro", "Takeaway.com", "MONSIEUR REMI BRETONIS", "Wagu Wagu", "LIWESI GASTRO", "Froyowelt", "SUSHI", "MCDONALDS", "OTTOS BURGER", "HEINZ BRAEUER", "Yomaro", "Cinnamood", "Wolt", "Schachcaf", "Mr. Clou", "Kaffeerosterei", "LOsteria", "KUMATEA", "Subway", "KJEKS", "VEGAN HOUSE", "Home Taste Jia"]
+  },
+  {
+    "category": "Freizeit",
+    "patterns": ["Dungeon", "Miniatur Wunderland", "Filmtheater", "Cinemas", "CinemaxX", "Klimahaus", "DB UKE", "DB Automaten", "BVG", "HANSEATISCHES MANUFAKT", "WUERFEL.ZUCKER", "FANS GLOBAL", "ASTOR", "balticbootcenter", "TeamBreakout", "MOIA GmbH", "Theater", "BAEDERLAND", "Westfalenhallen", "DE TKS GmbH", "Ruben Zickmann"],
+    "budget": [{"since": "2022-08-01", "value": 0}, {"since": "2023-07-01", "value": 200}]
+  },
+  {
+    "category": "Hund",
+    "patterns": ["Hunderettung Europa", "Barmenia", "Alte Leipziger", "Z(ET)?TL(E)?.?.T.J.H", "IZ .T J H HAMBURG", "Barfital", "Pet Food", "Herrmann GmbH", "Hunde Design", "Gassi Service", "hundeparadies", "Onlinepets", "Bellfor", "dogshop", "Hundesteuer", "Kasse Hamburg", "VECTAVIS", "LAY", "Digistore24", "^#2022-10-04"]
+  },
+  {
+    "category": "Miete",
+    "patterns": ["C. SCHENK UND D. SCHENK"]
+  },
+  {
+    "category": "Sonstiges",
+    "patterns": ["Heymann", "Globetrotter", "Stiftung Warentest", "Herosquad", "TRAVEL", "Boesner", "Sunday Natural", "Tower of Lond", "BAGGAGE", "MUJI", "Niederegger", "MARZIPANLAND", "SATURN", "Kapten . Son", "SHIPLEADER RETURNS", "Schulze GmbH", "BUDNIKOWSKY", "DM[- ]Drogerie", "Rossmann", "Universal-Stein", "Apotheke", "everdrop"],
+    "budget": [{"since": "2022-08-01", "value": 100}]
+  },
+  {
+    "category": "Versorger",
+    "patterns": ["wilhelm.tel", "Wasserwerke", "Energiewerke", "VHV Allgemeine Versicherung"]
+  },
+  {
+    "category": "Ausgeglichen",
+    "patterns": ["GREATER ANGLIA", "Shoryu", "KNOOPS", "JAPAN CENTRE", "Free From B", "COCO ICHIB"]
+  },
+  {
+    "category": "Urlaub",
+    "patterns": ["nothing"],
+    "budget": [{"since": "2022-08-01", "value": 0}, {"since": "2022-09-01", "value": 50}]
+  }
+]

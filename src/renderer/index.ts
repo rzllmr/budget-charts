@@ -2,6 +2,7 @@ import IElectronAPI from "./preload.js";
 import { Data, Entry } from "./data";
 import { TimelineFigure, ButtonInfo } from "./timelinefigure";
 import { DetailsTable } from "./detailstable";
+import { BudgetsTable } from "./budgetstable";
 
 declare global {
   interface Window {
@@ -17,18 +18,22 @@ class RendererIndex {
   private data?: Data;
   private timelineFigure: TimelineFigure;
   private detailsTable: DetailsTable;
+  private budgetsTable: BudgetsTable;
   private timeMode: string;
+  private budgetMode: boolean;
 
-  private defaultPath = "";
+  private defaultPath = "/Users/robertzillmer/Projects/active/budget-charts/1083895290.csv";
 
   constructor() {
     this.detailsTable = new DetailsTable();
-    this.timelineFigure = new TimelineFigure(this.detailsTable);
+    this.budgetsTable = new BudgetsTable();
+    this.timelineFigure = new TimelineFigure(this.detailsTable, this.budgetsTable);
 
     this.toggleButtons = new Array<HTMLButtonElement>();
     this.loadButton = document.getElementById('load-button') as HTMLButtonElement;
     this.pathText = document.getElementById('filepath') as HTMLElement;
     this.timeMode = 'months';
+    this.budgetMode = false;
 
     this.loadButton.addEventListener('click', () => this.askAndLoadFile());
   }
@@ -39,16 +44,14 @@ class RendererIndex {
     }
   }
 
+  private toggleBudgets() {
+    this.budgetMode = !this.budgetMode;
+    this.timelineFigure.setData(this.timeMode, this.data!.dateSums(this.timeMode, 12, this.budgetMode), true);
+  }
+
   private toggleTimeline() {
     this.timeMode = this.timeMode == 'months' ? 'weeks' : 'months';
-    switch (this.timeMode) {
-      case 'months':
-        this.timelineFigure.setData(this.timeMode, this.data!.dateSums('months', 12));
-        break;
-      case 'weeks':
-        this.timelineFigure.setData(this.timeMode, this.data!.dateSums('weeks', 12));
-        break;
-    }
+    this.timelineFigure.setData(this.timeMode, this.data!.dateSums(this.timeMode, 12, this.budgetMode));
   }
 
   private toggle(button: HTMLButtonElement) {
@@ -76,12 +79,17 @@ class RendererIndex {
   private fillData(records: Array<Entry>) {
     this.data = new Data(records);
     this.detailsTable.setData(this.data!);
+    this.budgetsTable.setData(this.data!);
     this.timelineFigure.setData(this.timeMode, this.data!.dateSums('months', 12));
     this.generateButtons(this.timelineFigure.categoryColors());
   }
 
   private generateButtons(infos: Array<ButtonInfo>) {
     const toggles = document.getElementById('toggles') as HTMLDivElement;
+
+    const budgetToggle = document.getElementById('budget-toggle') as HTMLButtonElement;
+    budgetToggle.addEventListener('click', () => this.toggleBudgets());
+    this.toggleButtons.push(budgetToggle);
 
     const timeToggle = document.getElementById('time-toggle') as HTMLButtonElement;
     timeToggle.addEventListener('click', () => this.toggleTimeline());

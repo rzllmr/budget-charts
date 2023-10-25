@@ -2,6 +2,7 @@ const { Chart, registerables } = require("chart.js");
 const annotationPlugin = require('chartjs-plugin-annotation');
 const Color = require("color");
 import { DetailsTable } from "./detailstable";
+import { BudgetsTable } from "./budgetstable";
 
 class Annotation {
   private _display = false;
@@ -53,9 +54,10 @@ export class TimelineFigure {
   private hidden: Set<string>;
   private highlighted: string;
 
-  private table: DetailsTable;
+  private detailsTable: DetailsTable;
+  private budgetsTable: BudgetsTable;
 
-  constructor(table: DetailsTable) {
+  constructor(detailsTable: DetailsTable, budgetsTable: BudgetsTable) {
     Chart.register(...registerables, annotationPlugin);
 
     this.canvas = document.getElementById("timeline-chart") as HTMLCanvasElement;
@@ -66,7 +68,8 @@ export class TimelineFigure {
     this.hidden = new Set<string>();
     this.highlighted = '';
 
-    this.table = table;
+    this.detailsTable = detailsTable;
+    this.budgetsTable = budgetsTable;
   }
 
   public createChart() {
@@ -108,6 +111,15 @@ export class TimelineFigure {
               },
             },
             annotations: {
+              line1: {
+                type: 'line',
+                display: () => this.annotation.display(),
+                xMin: () => this.annotation.posX(),
+                xMax: () => this.annotation.posX(),
+                borderColor: 'rgb(160, 160, 160)',
+                borderWidth: 2,
+                drawTime: 'beforeDatasetsDraw'
+              },
               point1: {
                 type: 'point',
                 display: () => this.annotation.display(),
@@ -134,11 +146,13 @@ export class TimelineFigure {
       const highlight = `${date}:${category}`;
       if (this.highlighted == highlight) {
         this.highlighted = '';
-        this.table.listRecords('all', '', '');
+        this.detailsTable.listRecords('all', '', '');
+        this.budgetsTable.listBudgets(this.mode);
         this.annotation.unset();
       } else {
         this.highlighted = highlight;
-        this.table.listRecords(this.mode, date, category);
+        this.detailsTable.listRecords(this.mode, date, category);
+        this.budgetsTable.listBudgets(this.mode, date);
         this.annotation.set(
           dataset.backgroundColor,
           selection[0].index,
@@ -150,8 +164,33 @@ export class TimelineFigure {
 
     return new Chart(this.context, config);
   }
+  
+  public select(date: string, category: string) {
+    const dataset = this.chart.data.datasets.find((dataset: any) => {
+      return dataset.type == 'line' && dataset.label == category
+    });
+    const dataIndex = 11;
 
-  public setData(mode: string, datasets: Array<{label: string, data:Array<{x: string, y: any}>}>) {
+    const highlight = `${date}:${category}`;
+    if (this.highlighted == highlight) {
+      this.highlighted = '';
+      this.detailsTable.listRecords('all', '', '');
+      this.budgetsTable.listBudgets(this.mode);
+      this.annotation.unset();
+    } else {
+      this.highlighted = highlight;
+      this.detailsTable.listRecords(this.mode, date, category);
+      this.budgetsTable.listBudgets(this.mode, date);
+      this.annotation.set(
+        dataset.backgroundColor,
+        dataIndex,
+        dataset.data[dataIndex]
+      );
+    }
+    this.chart.update();
+  }
+
+  public setData(mode: string, datasets: Array<{label: string, data:Array<{x: string, y: any}>, type: string}>, onlyBars = false) {
     this.mode = mode;
 
     const labels = new Array<string>();
@@ -161,12 +200,26 @@ export class TimelineFigure {
     this.chart.data.labels = labels;
 
     const colors = this.generateColors(
-      datasets.map(dataset => dataset.label).sort()
+      datasets.map(dataset => dataset.label).sort().filter((val, idx, arr) => arr.indexOf(val) === idx)
     );
 
-    this.chart.data.datasets = [];
+    if (onlyBars) {
+      while (true) {
+        const index = this.chart.data.datasets.findIndex((dataset: any) => dataset.type == 'bar');
+        if (index == -1) break;
+        this.chart.data.datasets.splice(index, 1);
+      }
+    } else {
+      this.chart.data.datasets = [];
+    }
+    
     for (const dataset of datasets) {
+      if (onlyBars && dataset.type == 'line') continue;
+      if (dataset.label == 'Ausgeglichen') continue;
+
       this.chart.data.datasets.push({
+        type: dataset.type,
+        order: dataset.type == 'line' ? 0 : 1,
         label: dataset.label,
         data: dataset.data.map((entry) => entry.y),
         borderColor: colors.get(dataset.label)?.border,
@@ -176,7 +229,8 @@ export class TimelineFigure {
     }
 
     this.highlighted = '';
-    this.table.listRecords('all', '', '');
+    this.detailsTable.listRecords('all', '', '');
+    this.budgetsTable.listBudgets(this.mode);
     this.annotation.unset();
 
     this.chart.update();
@@ -199,23 +253,33 @@ export class TimelineFigure {
   }
 
   public categoryColors(): Array<ButtonInfo> {
+    const addedCategories = new Array<string>;
     return this.chart.data.datasets.map((dataset: any) => {
+      if (addedCategories.includes(dataset.label)) {
+        return null;
+      } else {
+        addedCategories.push(dataset.label);
+      }
+
       return {
         category: dataset.label,
         borderColor: dataset.borderColor,
         backgroundColor: dataset.backgroundColor
       };
-    });
+    }).filter((data: ButtonInfo | null) => data != null);
   }
 
   public toggleData(label: string) {
-    const dataset = this.chart.data.datasets.find((dataset: any) => dataset.label == label);
-    if (dataset.hidden) {
-      dataset.hidden = false;
-      this.hidden.delete(dataset.label);
-    } else {
-      dataset.hidden = true;
-      this.hidden.add(dataset.label);
+    for (const dataset of this.chart.data.datasets) {
+      if (dataset.label != label) continue;
+
+      if (dataset.hidden) {
+        dataset.hidden = false;
+        this.hidden.delete(dataset.label);
+      } else {
+        dataset.hidden = true;
+        this.hidden.add(dataset.label);
+      }
     }
     this.chart.update();
   }

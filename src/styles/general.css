@@ -38,13 +38,13 @@ body {
   margin-left: 10px;
 }
 
-#details-container {
+#details-container, #budgets-container {
   margin-top: 20px;
 }
 
 #table-container {
   position: relative;
-  height: 37vh;
+  height: 30vh;
   overflow-y: scroll;
 }
 
@@ -52,7 +52,7 @@ body {
   margin-bottom: 10px;
 }
 
-#details-table {
+#details-table, #budgets-table {
   width: 100%;
   text-align: left;
 }
@@ -67,7 +67,7 @@ thead th {
   background: var(--color-background);
 }
 
-table td:nth-child(3), table th:nth-child(3) {
+table#details-table td:nth-child(3), table#details-table th:nth-child(3) {
   text-align: right;
 }
 
