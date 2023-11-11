@@ -87,13 +87,14 @@ class RendererIndex {
   private generateButtons(infos: Array<ButtonInfo>) {
     const toggles = document.getElementById('toggles') as HTMLDivElement;
 
+    this.toggleButtons.forEach(btn => toggles.removeChild(btn));
+    this.toggleButtons = []
+
     const budgetToggle = document.getElementById('budget-toggle') as HTMLButtonElement;
     budgetToggle.addEventListener('click', () => this.toggleBudgets());
-    this.toggleButtons.push(budgetToggle);
 
     const timeToggle = document.getElementById('time-toggle') as HTMLButtonElement;
     timeToggle.addEventListener('click', () => this.toggleTimeline());
-    this.toggleButtons.push(timeToggle);
 
     infos.forEach(info => {
       const toggleButton = document.createElement('button');
@@ -102,6 +103,7 @@ class RendererIndex {
       toggleButton.style.backgroundColor = info.backgroundColor;
       toggleButton.addEventListener('click', () => this.toggle(toggleButton));
       toggles.appendChild(toggleButton);
+      this.toggleButtons.push(toggleButton);
     });
   }
 }
