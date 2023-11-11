@@ -23,10 +23,10 @@ class Record {
 
   constructor(date?: string, client?: string, purpose?: string, amount?: string) {
     if (date == undefined || client == undefined || purpose == undefined || amount == undefined) throw 'undefined';
-    this.date = new Date(date.replace(/(\d+)\.(\d+)\.(\d+)/,"$3-$2-$1"));
+    this.date = new Date(date.replace(/(\d+)\.(\d+)\.(\d+)/, "$3-$2-$1").replace(/^(\d{2}-)/, "20$1"));
     this.client = client;
     this.purpose = purpose;
-    this.amount = parseFloat(amount.replace(/\./g, "").replace(/\,/g, "."));
+    this.amount = parseFloat(amount.replace(/\./g, "").replace(/\,/g, ".").replace(' €', ''));
     Record.sum += this.amount;
     this.sum = Record.sum;
 
@@ -102,7 +102,11 @@ export type Entry = {
   'Buchungstag': string,
   'Auftraggeber / Begünstigter': string,
   'Verwendungszweck': string,
-  'Betrag (EUR)': string
+  'Betrag (EUR)': string,
+  'Buchungsdatum': string,
+  'Zahlungsempfänger*in': string,
+  'Betrag': string,
+  'Status': string
 };
 
 export type ChartEntry<T> = {
@@ -115,13 +119,26 @@ export class Data {
   private ignoredCategories = ['Einzahlung', 'Hund'];
 
   constructor(rows: Array<Entry>) {
+    const oldFormat = rows[1]['Buchungstag'] != undefined;
     for (const row of rows.reverse()) {
-      const newRecord = new Record(
-        row['Buchungstag'],
-        row['Auftraggeber / Begünstigter'],
-        row['Verwendungszweck'],
-        row['Betrag (EUR)']
-      );
+      let newRecord: Record;
+      if (oldFormat) {
+        newRecord = new Record(
+          row['Buchungstag'],
+          row['Auftraggeber / Begünstigter'],
+          row['Verwendungszweck'],
+          row['Betrag (EUR)']
+        );
+      } else {
+        if (row['Status'] == 'Vorgemerkt') continue;
+        newRecord = new Record(
+          row['Buchungsdatum'],
+          row['Zahlungsempfänger*in'],
+          row['Verwendungszweck'],
+          row['Betrag']
+        );
+      }
+
       if (!this.ignoredCategories.includes(newRecord.category)) {
         this.records.push(newRecord);
       }
@@ -328,8 +345,8 @@ export class Data {
 
   private mergedInfo(client: string, purpose: string) {
     let parts = [
-      client.replace(/PayPal \(?Europe\)? S\.a.r\.l\. et Cie,? S\.C\.A\.?/, ''),
-      purpose.replace(/.+Debitk\.\d+ VISA Debit/, '')
+      client.replace(/PayPal \(?Europe\)? S\.a.r\.l\. et Cie,? S\.C\.A\.?/, '').replace(/\/(.+?)\/\/[A-Z]{2}$/, ''),
+      purpose.replace(/.+Debitk\..+? VISA De\s?bit.*/, '')
     ];
     return parts.filter((part) => part != '').join(' | ');
   }

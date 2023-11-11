@@ -56,9 +56,10 @@ class Main {
 
   private async loadFile(event: Electron.IpcMainInvokeEvent, path: string) {
     return new Promise((resolve) => {
+      const header_line = path.includes('Umsatzliste') ? 5 : 7;
       const records = new Array<Entry>;
       fs.createReadStream(path, {encoding: 'utf8'})
-        .pipe(parse({delimiter: ';', from_line: 7, columns: true}))
+        .pipe(parse({delimiter: ';', from_line: header_line, columns: true}))
         .on('error', err => resolve(err.message))
         .on('data', row => records.push(row))
         .on('end', () => resolve(records))
