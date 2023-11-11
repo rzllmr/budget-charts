@@ -279,12 +279,14 @@ export class Data {
     const recordData = new Array<Array<string>>([], []);
     const sortedKeys = Array.from(budgets.keys()).sort();
     for (const category of sortedKeys) {
-      if (category != 'Urlaub') {
+      if (!['Urlaub'].includes(category)) {
         recordData[0].push(`${category} (m)`);
         recordData[1].push(budgets.get(category)!);
       }
-      recordData[0].push(`${category} (y)`);
-      recordData[1].push(this.money(yearBudgets.get(category)!));
+      if (!['Essen', 'Freizeit', 'Sonstiges'].includes(category)) {
+        recordData[0].push(`${category} (y)`);
+        recordData[1].push(this.money(yearBudgets.get(category)!));
+      }
     }
     recordData[0].push(`Gesamt`);
     recordData[1].push(this.money(overallDiff));
