@@ -297,7 +297,7 @@ export class Data {
     const sortedKeys = Array.from(budgets.keys()).sort();
     for (const category of sortedKeys) {
       if (!['Urlaub'].includes(category)) {
-        recordData[0].push(`${category} (m)`);
+        recordData[0].push(`${category} (${mode?.at(0)})`);
         recordData[1].push(budgets.get(category)!);
       }
       if (!['Essen', 'Freizeit', 'Sonstiges'].includes(category)) {
