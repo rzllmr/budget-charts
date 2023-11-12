@@ -143,33 +143,16 @@ export class TimelineFigure {
       const dataset = this.chart.data.datasets[selection[0].datasetIndex];
       const category = dataset.label;
 
-      const highlight = `${date}:${category}`;
-      if (this.highlighted == highlight) {
-        this.highlighted = '';
-        this.detailsTable.listRecords('all', '', '');
-        this.budgetsTable.listBudgets(this.mode);
-        this.annotation.unset();
-      } else {
-        this.highlighted = highlight;
-        this.detailsTable.listRecords(this.mode, date, category);
-        this.budgetsTable.listBudgets(this.mode, date);
-        this.annotation.set(
-          dataset.backgroundColor,
-          selection[0].index,
-          dataset.data[selection[0].index]
-        );
-      }
-      this.chart.update();
+      this.select(date, category, selection[0].index);
     }
 
     return new Chart(this.context, config);
   }
   
-  public select(date: string, category: string) {
+  public select(date: string, category: string, dataIdx = 11) {
     const dataset = this.chart.data.datasets.find((dataset: any) => {
       return dataset.type == 'line' && dataset.label == category
     });
-    const dataIndex = 11;
 
     const highlight = `${date}:${category}`;
     if (this.highlighted == highlight) {
@@ -183,8 +166,8 @@ export class TimelineFigure {
       this.budgetsTable.listBudgets(this.mode, date);
       this.annotation.set(
         dataset.backgroundColor,
-        dataIndex,
-        dataset.data[dataIndex]
+        dataIdx,
+        dataset.data[dataIdx]
       );
     }
     this.chart.update();
@@ -229,11 +212,7 @@ export class TimelineFigure {
     }
 
     this.highlighted = '';
-    this.detailsTable.listRecords('all', '', '');
-    this.budgetsTable.listBudgets(this.mode);
-    this.annotation.unset();
-
-    this.chart.update();
+    this.select(labels[labels.length-1], 'Gesamt');
   }
 
   public generateColors(labels: Array<string>): Map<string, {border: string, background: string}> {
