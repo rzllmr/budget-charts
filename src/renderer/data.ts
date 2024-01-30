@@ -106,7 +106,8 @@ export type Entry = {
   'Buchungsdatum': string,
   'Zahlungsempfänger*in': string,
   'Betrag': string,
-  'Status': string
+  'Status': string,
+  'Betrag (€)': string
 };
 
 export type ChartEntry<T> = {
@@ -135,7 +136,7 @@ export class Data {
           row['Buchungsdatum'],
           row['Zahlungsempfänger*in'],
           row['Verwendungszweck'],
-          row['Betrag']
+          row['Betrag (€)']
         );
       }
 
@@ -277,6 +278,7 @@ export class Data {
       categorySums.forEach((sum, category) => {
         const budget = Record.currentBudget(category, _date);
         if (budget == null) {
+          // list of categories with extra spending
           if (!['Einrichtung'].includes(category)) return;
           const summedSpending = restSpending.get(category) || 0;
           restSpending.set(category, summedSpending + sum);
@@ -287,6 +289,7 @@ export class Data {
       });
     });
 
+    // sum of all budget diffs minus extra spending
     let overallDiff = 0;
     restSpending.forEach((sum) => overallDiff += sum);
     yearBudgets.forEach((sum, category) => {
@@ -296,11 +299,11 @@ export class Data {
     const recordData = new Array<Array<string>>([], []);
     const sortedKeys = Array.from(budgets.keys()).sort();
     for (const category of sortedKeys) {
-      if (!['Urlaub'].includes(category)) {
+      if (['Essen', 'Freizeit', 'Sonstiges'].includes(category)) {
         recordData[0].push(`${category} (${mode?.at(0)})`);
         recordData[1].push(budgets.get(category)!);
       }
-      if (!['Essen', 'Freizeit', 'Sonstiges'].includes(category)) {
+      if (['Urlaub'].includes(category)) {
         recordData[0].push(`${category} (y)`);
         recordData[1].push(this.money(yearBudgets.get(category)!));
       }

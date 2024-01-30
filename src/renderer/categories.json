@@ -6,7 +6,7 @@
   },
   {
     "category": "Einrichtung",
-    "patterns": ["Depot", "BAUHAUS", "Hagebaumarkt", "H.M Home", "Ikea", "Plantura", "Galeria", "Schnoor One", "Die Pampi", "Gartnereibedarf", "Butlers", "MissPompadour", "Motel a Miio", "Artavola", "So Clever", "FLORISTI", "Kara", "niceshops", "MEDIA MARKT", "toom", "Cyberport", "Ruggable", "Sybotanica", "Teppich"]
+    "patterns": ["Depot", "BAUHAUS", "Hagebaumarkt", "H.M Home", "Ikea", "Plantura", "Galeria", "Schnoor One", "Die Pampi", "Gartnereibedarf", "Butlers", "MissPompadour", "Motel a Miio", "Artavola", "So Clever", "FLORISTI", "Kara", "niceshops", "MEDIA MARKT", "toom", "Cyberport", "Ruggable", "Sybotanica", "Teppich", "H.amp.M Home", "Maisons du Monde", "SOESTRENE GRENE", "Lang Lichttechnik"]
   },
   {
     "category": "Einzahlung",
@@ -14,11 +14,11 @@
   },
   {
     "category": "Restaurant",
-    "patterns": ["Le Crobag", "Allwoerde", "NUR HIER", "Konditorei Junge", "Baeckerei", "Stadtbackerei", "Kumpir", "Louisiana", "Frittenwerk", "Peter Pane", "Soulkebab", "Pommes", "dean . david", "Tokas", "Vegangster", "Too Good To Go", "Tekin Imbiss", "Teas", "Froindlichst", "friends boba", "Donuts", "Ditsch", "Schokoladerie", "World of Candy", "Neotaste", "Yellowbird", "Cafe", "Bonbon", "Pizza", "Starbucks", "Eiswerkstatt", "Tortcheneck", "Tee", "Rainbow Ice", "Markthalle", "Laederach", "Bistro", "Takeaway.com", "MONSIEUR REMI BRETONIS", "Wagu Wagu", "LIWESI GASTRO", "Froyowelt", "SUSHI", "MCDONALDS", "OTTOS BURGER", "HEINZ BRAEUER", "Yomaro", "Cinnamood", "Wolt", "Schachcaf", "Mr. Clou", "Kaffeerosterei", "LOsteria", "KUMATEA", "Subway", "KJEKS", "VEGAN HOUSE", "Home Taste Jia", "KATERS KOOK", "MALU NUTRITION", "PAUSENFUDDER", "LuettLiv", "The Vegan Sauc", "snacks with be"]
+    "patterns": ["Le Crobag", "Allwoerde", "NUR HIER", "Konditorei Junge", "Baeckerei", "Stadtbackerei", "Kumpir", "Louisiana", "Frittenwerk", "Peter Pane", "Soulkebab", "Pommes", "dean . david", "Tokas", "Vegangster", "Too Good To Go", "Tekin Imbiss", "Teas", "Froindlichst", "friends boba", "Donuts", "Ditsch", "Schokoladerie", "World of Candy", "Neotaste", "Yellowbird", "Cafe", "Bonbon", "Pizza", "Starbucks", "Eiswerkstatt", "Tortcheneck", "Tee", "Rainbow Ice", "Markthalle", "Laederach", "Bistro", "Takeaway.com", "MONSIEUR REMI BRETONIS", "Wagu Wagu", "LIWESI GASTRO", "Froyowelt", "SUSHI", "MCDONALDS", "OTTOS BURGER", "HEINZ BRAEUER", "Yomaro", "Cinnamood", "Wolt", "Schachcaf", "Mr. Clou", "Kaffeerosterei", "LOsteria", "KUMATEA", "Subway", "KJEKS", "VEGAN HOUSE", "Home Taste Jia", "KATERS KOOK", "MALU NUTRITION", "PAUSENFUDDER", "LuettLiv", "The Vegan Sauc", "snacks with be", "Katzentempel", "GEILE WARENAUTOMATEN", "Velivery", "Uber"]
   },
   {
     "category": "Freizeit",
-    "patterns": ["Dungeon", "Miniatur Wunderland", "Filmtheater", "Cinemas", "CinemaxX", "Klimahaus", "DB UKE", "DB Automaten", "BVG", "HANSEATISCHES MANUFAKT", "WUERFEL.ZUCKER", "FANS GLOBAL", "ASTOR", "balticbootcenter", "TeamBreakout", "MOIA GmbH", "Theater", "BAEDERLAND", "Westfalenhallen", "DE TKS GmbH", "Ruben Zickmann"],
+    "patterns": ["Dungeon", "Miniatur Wunderland", "Filmtheater", "Cinemas", "CinemaxX", "Klimahaus", "DB UKE", "DB Automaten", "DB Vertrieb", "BVG", "HANSEATISCHES MANUFAKT", "WUERFEL.ZUCKER", "FANS GLOBAL", "ASTOR", "balticbootcenter", "TeamBreakout", "MOIA GmbH", "Theater", "BAEDERLAND", "Westfalenhallen", "DE TKS GmbH", "Ruben Zickmann", "BUCERIUS KUNST FORUM"],
     "budget": [{"since": "2022-08-01", "value": 0}, {"since": "2023-07-01", "value": 400}]
   },
   {
@@ -31,7 +31,7 @@
   },
   {
     "category": "Sonstiges",
-    "patterns": ["Heymann", "Globetrotter", "Stiftung Warentest", "Herosquad", "TRAVEL", "Boesner", "Sunday Natural", "Tower of Lond", "BAGGAGE", "MUJI", "Niederegger", "MARZIPANLAND", "SATURN", "Kapten . Son", "SHIPLEADER RETURNS", "Schulze GmbH", "BUDNIKOWSKY", "DM[- ]Drogerie", "Rossmann", "Universal-Stein", "Apotheke", "everdrop", "NKM ATELIER", "MCPAPER", "Hobbii", "completeorganics", "Paarzeit", "CIRCLESTANCES", "Gustavo Trading"],
+    "patterns": ["Heymann", "Globetrotter", "Stiftung Warentest", "Herosquad", "Boesner", "Sunday Natural", "MUJI", "Niederegger", "MARZIPANLAND", "SATURN", "Kapten . Son", "SHIPLEADER RETURNS", "Schulze GmbH", "BUDNIKOWSKY", "DM[- ]Drogerie", "Rossmann", "Universal-Stein", "Apotheke", "everdrop", "NKM ATELIER", "MCPAPER", "Hobbii", "completeorganics", "Paarzeit", "CIRCLESTANCES", "Gustavo Trading", "TK Maxx", "Atlantis - Spiele", "Futura GmbH", "CURADEN"],
     "budget": [{"since": "2022-08-01", "value": 0}, {"since": "2022-09-01", "value": 100}]
   },
   {
@@ -40,7 +40,7 @@
   },
   {
     "category": "Ausgeglichen",
-    "patterns": ["GREATER ANGLIA", "Shoryu", "KNOOPS", "JAPAN CENTRE", "Free From B", "COCO ICHIB"]
+    "patterns": ["GREATER ANGLIA", "Shoryu", "KNOOPS", "JAPAN CENTRE", "Free From B", "COCO ICHIB", "//GB", "//JP"]
   },
   {
     "category": "Urlaub",
