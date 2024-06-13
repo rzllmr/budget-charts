@@ -73,7 +73,8 @@ class Record {
     let currentBudget = null;
     for (const info of categoryInfos) {
       let infoCategory = info.category;
-      if (infoCategory == "Einkauf") infoCategory = "Essen";
+      if (infoCategory == "Unternehmung") infoCategory = "Freizeit";
+      if (infoCategory == "Sonstiges") infoCategory = "Anschaffungen";
       if (infoCategory == category) {
         if (info.budget == undefined || info.budget.length == 0) return null;
         for (const budget of info.budget) {
@@ -118,6 +119,7 @@ export type ChartEntry<T> = {
 export class Data {
   private records = new Array<Record>();
   private ignoredCategories = ['Einzahlung', 'Hund'];
+  private miscRaise = new Date("2024-02-01");
 
   constructor(rows: Array<Entry>) {
     const oldFormat = rows[1]['Buchungstag'] != undefined;
@@ -169,15 +171,18 @@ export class Data {
       if (category == 'unbekannt') unknownSum -= amount;
     });
 
-    sums.forEach((categorySums) => {
+    sums.forEach((categorySums, date) => {
       let overallSum = 0;
-      let foodSum = 0;
+      let funSum = 0;
+      let conSum = 0;
       categorySums.forEach((amount, category) => {
         overallSum += amount;
-        if (['Einkauf', 'Restaurant'].includes(category)) foodSum += amount;
+        if (['Unternehmung', 'Restaurant'].includes(category)) funSum += amount;
+        if ('Sonstiges' == category || 'Einrichtung' == category && new Date(date) >= this.miscRaise) conSum += amount;
       });
       categorySums.set('Gesamt', overallSum);
-      categorySums.set('Essen', foodSum);
+      categorySums.set('Freizeit', funSum);
+      categorySums.set('Anschaffungen', conSum);
     })
 
     if (unknownSum == 0) {
@@ -241,8 +246,9 @@ export class Data {
     for (const record of this.records) {
       if (mode != 'all') {
         if (date && date != convertDate(record.date)) continue;
-        if (category && category != 'Gesamt' && category != "Essen" && category != record.category) continue;
-        if (category == 'Essen' && !['Einkauf', 'Restaurant'].includes(record.category)) continue;
+        if (category && category != 'Gesamt' && category != "Freizeit" && category != "Anschaffungen" && category != record.category) continue;
+        if (category == 'Freizeit' && !['Unternehmung', 'Restaurant'].includes(record.category)) continue;
+        if (category == 'Anschaffungen' && 'Sonstiges' != record.category && !('Einrichtung' == record.category && record.date >= this.miscRaise)) continue;
       }
 
       recordData.push(
@@ -272,14 +278,14 @@ export class Data {
     const restSpending = new Map<string,number>();
     const yearBudgets = new Map<string,number>();
     sums.forEach((categorySums, _date) => {
-      if (_date.split('-')[0] != date.split('-')[0]
-        || parseInt(_date.substring(_date.length - 2)) > parseInt(date.substring(date.length - 2))) return;
+      if (!this.withinYear(_date, date)) return;
 
       categorySums.forEach((sum, category) => {
         const budget = Record.currentBudget(category, _date);
+
         if (budget == null) {
           // list of categories with extra spending
-          if (!['Einrichtung'].includes(category)) return;
+          if (!('Einrichtung' == category && new Date(_date) < this.miscRaise)) return;
           const summedSpending = restSpending.get(category) || 0;
           restSpending.set(category, summedSpending + sum);
         } else {
@@ -288,6 +294,13 @@ export class Data {
         }
       });
     });
+
+    /** budget summaries as follows:
+      Einkauf (m), Freizeit (m): rest of budget for month
+      Anschaffungen (y), Urlaub (y): balance of summed budget and spending for a year
+      Gesamt: balance summed budget and spending for a year of Anschaffungen, Einkauf and Freizeit
+      plus extra spending on Einrichtung before part of budget for Anschaffungen
+    */
 
     // sum of all budget diffs minus extra spending
     let overallDiff = 0;
@@ -299,11 +312,11 @@ export class Data {
     const recordData = new Array<Array<string>>([], []);
     const sortedKeys = Array.from(budgets.keys()).sort();
     for (const category of sortedKeys) {
-      if (['Essen', 'Freizeit', 'Sonstiges'].includes(category)) {
+      if (['Einkauf', 'Freizeit'].includes(category)) {
         recordData[0].push(`${category} (${mode?.at(0)})`);
         recordData[1].push(budgets.get(category)!);
       }
-      if (['Urlaub'].includes(category)) {
+      if (['Urlaub', 'Anschaffungen'].includes(category)) {
         recordData[0].push(`${category} (y)`);
         recordData[1].push(this.money(yearBudgets.get(category)!));
       }
