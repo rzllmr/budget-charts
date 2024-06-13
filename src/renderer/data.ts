@@ -359,6 +359,22 @@ export class Data {
     return `${yyyy}-${mm}-${dd}`;
   }
 
+  private withinYear(currDate: string, refDate: string) : boolean {
+    if (currDate.includes('KW')) {
+      const currSplit = currDate.split('-KW').map(x => parseInt(x));
+      const refSplit = refDate.split('-KW').map(x => parseInt(x));
+      return currSplit[0] == refSplit[0] || (currSplit[0] == refSplit[0] - 1 && currSplit[1] >= refSplit[1]);
+    } else {
+      const currDateObj = new Date(currDate);
+      const refDateObj = new Date(refDate);
+      const minDateObj = new Date(refDate);
+      minDateObj.setFullYear(minDateObj.getFullYear() - 1);
+      minDateObj.setMonth(minDateObj.getMonth() + 1);
+      minDateObj.setDate(1);
+      return currDateObj >= minDateObj && currDateObj <= refDateObj;
+    }
+  }
+
   private mergedInfo(client: string, purpose: string) {
     let parts = [
       client.replace(/PayPal \(?Europe\)? S\.a.r\.l\. et Cie,? S\.C\.A\.?/, '').replace(/\/(.+?)\/\/[A-Z]{2}$/, ''),

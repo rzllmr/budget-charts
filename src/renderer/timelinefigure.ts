@@ -212,7 +212,12 @@ export class TimelineFigure {
     }
 
     this.highlighted = '';
-    this.select(labels[labels.length-1], 'Gesamt');
+    this.select(this.latestDate(), 'Gesamt');
+  }
+
+  public latestDate() {
+    const labels = this.chart.data.labels;
+    return labels[labels.length-1];
   }
 
   public generateColors(labels: Array<string>): Map<string, {border: string, background: string}> {
