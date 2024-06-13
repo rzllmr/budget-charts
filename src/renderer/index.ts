@@ -52,11 +52,14 @@ class RendererIndex {
   private toggleTimeline() {
     this.timeMode = this.timeMode == 'months' ? 'weeks' : 'months';
     this.timelineFigure.setData(this.timeMode, this.data!.dateSums(this.timeMode, 12, this.budgetMode));
+    this.toggleDefaults(this.timeMode, this.timelineFigure);
   }
 
-  private toggle(button: HTMLButtonElement) {
-    this.timelineFigure.toggleData(button.textContent || '');
-    button.classList.toggle('hidden');
+  private toggle(button: HTMLButtonElement, activate: boolean | null = null) {
+    this.timelineFigure.toggleData(button.textContent || '', activate);
+    if (activate == true) button.classList.remove('hidden');
+    else if (activate == false) button.classList.add('hidden');
+    else button.classList.toggle('hidden');
   }
 
   private askAndLoadFile() {
@@ -82,6 +85,8 @@ class RendererIndex {
     this.budgetsTable.setData(this.data!);
     this.timelineFigure.setData(this.timeMode, this.data!.dateSums('months', 12));
     this.generateButtons(this.timelineFigure.categoryColors());
+    this.toggleBudgets();
+    this.toggleDefaults(this.timeMode, this.timelineFigure);
   }
 
   private generateButtons(infos: Array<ButtonInfo>) {
@@ -105,6 +110,22 @@ class RendererIndex {
       toggles.appendChild(toggleButton);
       this.toggleButtons.push(toggleButton);
     });
+  }
+
+  private toggleDefaults(timeMode: string, figure: TimelineFigure) {
+    let defaultActives: Array<string>;
+    let highlight: string;
+    if (timeMode == 'months') {
+      defaultActives = ['Anschaffungen', 'Einkauf', 'Freizeit', 'Urlaub'];
+      highlight = 'Anschaffungen';
+    } else {
+      defaultActives = ['Einkauf', 'Freizeit'];
+      highlight = 'Freizeit';
+    }
+    this.toggleButtons.forEach(button => {
+      this.toggle(button, defaultActives.includes(button.textContent || ''));
+    });
+    figure.select(figure.latestDate(), highlight);
   }
 }
 

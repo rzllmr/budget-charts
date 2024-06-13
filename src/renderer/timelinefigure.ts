@@ -253,11 +253,13 @@ export class TimelineFigure {
     }).filter((data: ButtonInfo | null) => data != null);
   }
 
-  public toggleData(label: string) {
+  public toggleData(label: string, show: boolean | null = null) {
     for (const dataset of this.chart.data.datasets) {
       if (dataset.label != label) continue;
 
-      if (dataset.hidden) {
+      if (show == null) show = dataset.hidden;
+
+      if (show) {
         dataset.hidden = false;
         this.hidden.delete(dataset.label);
       } else {
